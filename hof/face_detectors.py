@@ -1,3 +1,4 @@
+import os
 import logging
 from abc import ABCMeta, abstractmethod, abstractproperty
 
@@ -191,6 +192,11 @@ class YOLOv2FaceDetector(FaceDetector):
         self.cfg = 'models/yolo/yolo-obj.cfg'
         self.model = 'models/yolo/yolo-face_1400.weights'
         self.names = 'models/yolo/obj.names'
+
+        if not os.path.exists(self.cfg):
+            log.info('Cfg not found. Triggering download.')
+            self.download_and_extract_model('models/')
+
         self.net = cv2.dnn.readNetFromDarknet(self.cfg, self.model)
         if self.net.empty():
             raise ValueError('Could not load net')
