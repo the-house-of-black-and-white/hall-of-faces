@@ -1,6 +1,6 @@
 # Hall of Faces: a face detection model zoo
 
-![Hall of Faces](images/hall-of-faces-bboxed_2.png) 
+<img src="https://github.com/the-house-of-black-and-white/hall-of-faces/raw/master/images/hall-of-faces-bboxed_2.png" alt="Hall of Faces" style="max-width:50%;" >
 
 A collection of face detection models pre-trained on the [Widerface](http://mmlab.ie.cuhk.edu.hk/projects/WIDERFace/) 
 dataset. 
