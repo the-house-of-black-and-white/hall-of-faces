@@ -33,7 +33,14 @@ class FaceDetector:
     def google_drive_doc_id(self):
         pass
 
+    @staticmethod
+    def _ensure_dir(file_path):
+        directory = os.path.dirname(file_path)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
     def download_and_extract_model(self, target_dir):
+        self._ensure_dir(target_dir)
         downloader = Downloader(target_dir)
         downloader.download_file_from_google_drive(destination=self.model_file_name, id=self.google_drive_doc_id)
         downloader.extract_tar_file(destination=target_dir, zip_file_name=self.model_file_name)
@@ -187,10 +194,13 @@ class YOLOv2FaceDetector(FaceDetector):
         return '1xm1zLd4Up6-lBBKegGSD1PCjsN2DYhX9'
 
     def cfg(self):
-        return 'models/yolo/yolo-widerface.cfg'
+        return '{}/yolo-widerface.cfg'.format(self.model_dir())
 
     def model(self):
-        return 'models/yolo/yolo-widerface_final.weights'
+        return '{}/yolo-widerface_final.weights'.format(self.model_dir())
+
+    def model_dir(self):
+        return 'models/{}/'.format(self.name)
 
     def __init__(self, min_confidence):
         super(YOLOv2FaceDetector, self).__init__()
@@ -201,7 +211,7 @@ class YOLOv2FaceDetector(FaceDetector):
 
         if not os.path.exists(self.cfg):
             log.info('Cfg not found. Triggering download.')
-            self.download_and_extract_model('models/')
+            self.download_and_extract_model(self.model_dir())
 
         self.net = cv2.dnn.readNetFromDarknet(self.cfg, self.model)
         if self.net.empty():
@@ -250,10 +260,10 @@ class TinyYOLOFaceDetector(YOLOv2FaceDetector):
         return '1wAy6-XWDBHMMawgPfKv2hp_Q5NBYqK1n'
 
     def cfg(self):
-        return 'models/yolo/tiny-yolo-widerface.cfg'
+        return '{}/tiny-yolo-widerface.cfg'.format(self.model_dir())
 
     def model(self):
-        return 'models/yolo/tiny-yolo-widerface_final.weights'
+        return '{}/tiny-yolo-widerface_final.weights'.format(self.model_dir())
 
 
 class ViolaJonesFaceDetector(FaceDetector):
