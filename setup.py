@@ -30,7 +30,8 @@ setup(
 
     # Dependent packages (distributions)
     install_requires=[
-        'requests'
+        'requests',
+        'opencv-python'
     ],
 
     extras_require={
