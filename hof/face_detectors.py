@@ -170,8 +170,8 @@ class SSDMobileNetV1FaceDetector(BaseTensorflowFaceDetector):
 
 
 class YOLOv2FaceDetector(FaceDetector):
-    inWidth = 544
-    inHeight = 544
+    inWidth = 416
+    inHeight = 416
     inScaleFactor = 1 / float(255)
 
     @property
@@ -180,17 +180,23 @@ class YOLOv2FaceDetector(FaceDetector):
 
     @property
     def model_file_name(self):
-        return 'yolo-widerface-1400.tar.gz'
+        return 'yolo-widerface-v2.tar.gz'
 
     @property
     def google_drive_doc_id(self):
-        return '1_Uj59hkJEpht2ykZphW4m-l42odwkPJB'
+        return '1xm1zLd4Up6-lBBKegGSD1PCjsN2DYhX9'
+
+    def cfg(self):
+        return 'models/yolo/yolo-widerface.cfg'
+
+    def model(self):
+        return 'models/yolo/yolo-widerface_final.weights'
 
     def __init__(self, min_confidence):
         super(YOLOv2FaceDetector, self).__init__()
         self.min_confidence = min_confidence
-        self.cfg = 'models/yolo/yolo-obj.cfg'
-        self.model = 'models/yolo/yolo-face_1400.weights'
+        self.cfg = self.cfg()
+        self.model = self.model()
         self.names = 'models/yolo/obj.names'
 
         if not os.path.exists(self.cfg):
@@ -224,6 +230,30 @@ class YOLOv2FaceDetector(FaceDetector):
                 if draw_faces:
                     self.draw_face(image, (xmin, ymin, int(width), int(height)), color)
         return faces
+
+
+class TinyYOLOFaceDetector(YOLOv2FaceDetector):
+
+    def __init__(self, min_confidence):
+        super(TinyYOLOFaceDetector, self).__init__(min_confidence)
+
+    @property
+    def name(self):
+        return 'TinyYOLO'
+
+    @property
+    def model_file_name(self):
+        return 'tiny-yolo-widerface-v2.tar.gz'
+
+    @property
+    def google_drive_doc_id(self):
+        return '1wAy6-XWDBHMMawgPfKv2hp_Q5NBYqK1n'
+
+    def cfg(self):
+        return 'models/yolo/tiny-yolo-widerface.cfg'
+
+    def model(self):
+        return 'models/yolo/tiny-yolo-widerface_final.weights'
 
 
 class ViolaJonesFaceDetector(FaceDetector):
